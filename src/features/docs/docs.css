@@ -1,0 +1,9 @@
+/* Docs feature chrome (DiagramViews.swift toolbar: .buttonStyle(.borderless), .controlSize(.small)). */
+.doc-borderless { display: inline-flex; align-items: center; gap: 4px; flex: none; border: 0; background: transparent; padding: 0; height: 18px; color: var(--accent); font-size: 11px; white-space: nowrap; cursor: default; }
+.doc-borderless:active:not(:disabled) { opacity: 0.6; }
+.doc-borderless:disabled { opacity: 0.4; }
+/* .pickerStyle(.segmented) at .controlSize(.small): 20pt tall, 11pt labels,
+   equal-width segments, and the selected thumb fills the track edge to edge. */
+.doc-toolbar .segmented { display: inline-grid; grid-auto-flow: column; grid-auto-columns: 1fr; padding: 0; gap: 0; border-radius: 6px; }
+.doc-toolbar .segmented button { height: 20px; padding: 0 10px; font-size: 11px; border-radius: 6px; color: var(--text); }
+.doc-toolbar .segmented button.on { color: #fff; }

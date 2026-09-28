@@ -1,0 +1,102 @@
+/* The agent chat and the SPAR loop. */
+/* MarkdownView(compact: true): blocks 7pt apart, every heading .headline, inline code is just
+   monospaced (Foundation's inline markdown), blocks of code monoSmall on subtle, tables as rows. */
+.chat-md { font-size: 13px; line-height: 16px; overflow-wrap: anywhere; display: flex; flex-direction: column; gap: 7px; }
+.chat-md > * { margin: 0; }
+.chat-md p { margin: 0; }
+.chat-md h1, .chat-md h2, .chat-md h3, .chat-md h4, .chat-md h5, .chat-md h6 { margin: 2px 0 0; font-size: 13px; font-weight: 600; line-height: 16px; }
+.chat-md ul, .chat-md ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 3px; }
+.chat-md li { margin: 0; }
+.chat-md li::marker { color: var(--text-2); }
+.chat-md code { font-family: var(--mono); font-size: 1em; background: none; padding: 0; }
+.chat-md pre { background: var(--subtle); border-radius: 8px; padding: 12px; overflow-x: auto; margin: 0; }
+.chat-md pre code { font-size: 11.5px; line-height: 1.35; }
+.chat-md blockquote { margin: 0; padding-left: 13px; position: relative; color: var(--text-2); }
+.chat-md blockquote::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; border-radius: 1px; background: color-mix(in srgb, var(--accent) 50%, transparent); }
+.chat-md blockquote p { margin: 0; }
+.chat-md table { border-collapse: collapse; margin: 0; font-size: 12px; display: table; width: 100%; background: color-mix(in srgb, var(--subtle) 60%, transparent); border-radius: 8px; overflow: hidden; }
+.chat-md th, .chat-md td { border: 0; border-bottom: 0.5px solid color-mix(in srgb, var(--hairline-strong) 50%, transparent); padding: 7px 12px; text-align: left; vertical-align: top; }
+.chat-md th { font-weight: 600; border-bottom-color: var(--hairline-strong); }
+.chat-md tr:last-child td { border-bottom: 0; }
+.chat-md hr { border: 0; height: 0.5px; background: var(--hairline-strong); margin: 4px 0; width: 100%; }
+.chat-md input[type="checkbox"] { accent-color: var(--done); margin: 0 6px 0 -18px; }
+
+.chat-scroll { flex: 1; min-height: 0; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.chat-user { line-height: 16px; align-self: flex-end; max-width: calc(100% - 40px); background: color-mix(in srgb, var(--accent) 10%, transparent); padding: 8px 12px; border-radius: 12px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.chat-user.clamped { display: -webkit-box; -webkit-line-clamp: 12; -webkit-box-orient: vertical; overflow: hidden; }
+.chat-note { font-size: 10px; line-height: 13px; color: var(--text-2); text-align: center; }
+.chat-tool { display: flex; align-items: center; gap: 7px; font-size: 12px; line-height: 15px; background: none; border: 0; padding: 0; text-align: left; width: 100%; color: inherit; min-width: 0; }
+.chat-tool .summary { color: var(--text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1; }
+.chat-output { font: 11.5px/14px var(--mono); letter-spacing: 0.2px; max-height: 220px; overflow: auto; background: var(--subtle); border-radius: 8px; padding: 10px; white-space: pre-wrap; margin-top: 6px; }
+.chat-link { background: none; border: 0; padding: 0; color: var(--accent); font-size: 12px; }
+.chat-link:hover { text-decoration: underline; }
+.step-card { border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; line-height: 1.25; }
+.chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 999px; font-size: 11.5px; font-weight: 500; white-space: nowrap; }
+.chip button { background: none; border: 0; padding: 0; color: var(--text-2); display: inline-flex; }
+/* The Mac app's option menus are borderless: accent-tinted icon + label, no capsule, no chevron. */
+.opt-pill { display: inline-flex; align-items: center; gap: 4px; padding: 3px 5px; border-radius: 6px; font-size: 11.5px; font-weight: 500; background: transparent; border: 0; color: var(--accent); white-space: nowrap; flex: none; }
+.opt-pill:hover { background: var(--subtle); }
+.opt-pill .lucide-chevron-down { display: none; }
+.composer { margin: 4px 12px 18px; padding: 12px; border-radius: 14px; background: var(--field); position: relative; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 3px 16px color-mix(in srgb, var(--accent) 5%, transparent); transition: box-shadow .2s; }
+.composer.focused { box-shadow: 0 3px 28px color-mix(in srgb, var(--accent) 18%, transparent); }
+.composer::before { content: ""; position: absolute; inset: 0; border-radius: 14px; padding: 1px; pointer-events: none;
+  background: conic-gradient(from var(--angle, 0deg), #1f99cc, #5c57f2, #ed802e, #33a878, #1f99cc);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0.45; }
+.composer.active::before { opacity: 1; padding: 1.5px; animation: composer-turn 8s linear infinite; }
+.composer.busy::before { padding: 2px; animation-duration: 3s; }
+@property --angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+@keyframes composer-turn { to { --angle: 360deg; } }
+.composer textarea { border: 0; outline: none; background: transparent; resize: none; font-size: 14px; line-height: 17px; padding: 0; width: 100%; max-height: 238px; min-height: 51px; }
+.mention-list { background: var(--subtle); border-radius: 10px; padding: 4px; display: flex; flex-direction: column; }
+.mention-item { display: flex; align-items: center; gap: 8px; padding: 5px 8px; border-radius: 6px; font-size: 12px; background: none; border: 0; text-align: left; color: inherit; min-width: 0; }
+.mention-item.first, .mention-item:hover { background: color-mix(in srgb, var(--accent) 9%, transparent); }
+/* The loop sidebar and phase pages: see loop.css. */
+.qf-option { display: flex; align-items: flex-start; gap: 8px; background: none; border: 0; padding: 0; text-align: left; color: inherit; width: 100%; }
+.qf-option:disabled { opacity: .7; }
+.drop-overlay { position: absolute; inset: 8px; border: 2px dashed var(--accent); border-radius: 12px; background: color-mix(in srgb, var(--accent) 6%, transparent); display: flex; align-items: center; justify-content: center; gap: 6px; color: var(--accent); font-weight: 600; pointer-events: none; z-index: 5; }
+
+/* Spec-driven / Vibe: segmented, equal segments; in the running Mac app (active window, app
+   tint) the selected segment is accent-filled on a grey track — sampled from its screenshot. */
+.flow-switch .segmented { padding: 1px; border-radius: 7px; gap: 0; background: var(--seg-track); display: inline-grid; grid-auto-flow: column; grid-auto-columns: 1fr; }
+.flow-switch .segmented button { min-width: 0; padding: 2px 10px; height: 21px; font-size: 13px; line-height: 17px; border-radius: 6px; color: var(--text); }
+.flow-switch .segmented button.on { background: var(--accent); color: #fff; box-shadow: 0 0.5px 1px rgba(0,0,0,0.25); }
+
+/* Borderless buttons and menus take the app's tint (SPARApp: .tint(Theme.accent)). */
+.icon-btn.agent-head-btn { color: var(--accent); }
+.icon-btn.agent-head-btn:hover:not(:disabled) { color: var(--accent); }
+.composer .icon-btn { color: var(--accent); }
+.composer .icon-btn:hover:not(:disabled) { color: var(--accent); }
+/* Send: .borderedProminent tinted with the agent's colour (dimmed while disabled). */
+.btn.composer-btn { width: 24px; height: 20px; padding: 0; border-radius: 5px; }
+.btn.composer-send { background: var(--tint); }
+.btn.composer-send:hover:not(:disabled) { background: var(--tint); filter: brightness(1.08); }
+.btn.composer-send:disabled { opacity: 0.45; }
+.composer textarea::placeholder { color: var(--text-2); opacity: 1; }
+
+/* .controlSize(.mini) */
+.btn.btn-mini { height: 18px; padding: 0 6px; font-size: 11px; border-radius: 4px; }
+/* QuestionForm: the "Recommended" capsule (caption2 semibold, accent 15%). */
+.qf-rec { font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 999px; background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent); line-height: 1.3; }
+
+/* SwiftUI text styles on macOS (measured against an offscreen SwiftUI render):
+   caption/caption2/footnote 10, subheadline 11, callout 12, body/headline 13, title3 15, title2 17. */
+.t-caption { font-size: 10px; }
+.t-sub { font-size: 11px; }
+.t-callout { font-size: 12px; letter-spacing: 0; }
+.t-body { font-size: 13px; }
+.t-headline { font-size: 13px; font-weight: 600; }
+.t-title3 { font-size: 15px; }
+.t-title2 { font-size: 17px; font-weight: 600; }
+/* .controlSize(.small) push buttons are 20pt tall in SwiftUI. */
+.agent-panel .btn.btn-small { height: 20px; }
+/* Theme.monoSmall (SF Mono 11.5) blocks: approval previews and tool output. */
+.mono-small { font-family: var(--mono); font-size: 11.5px; line-height: 14px; letter-spacing: 0.2px; }
+/* SPARApp sets .tint(Theme.accent): SwiftUI then draws plain .bordered buttons with accent
+   text on a faint tinted fill (measured: accent 5% + white 2% over the background). */
+.agent-panel .btn:not(.btn-small):not(.btn-large) { height: 24px; }
+/* QuestionForm: callout rows (15pt lines), caption details. */
+.qf { line-height: 15px; }
+.qf .t-caption { line-height: 13px; }
+/* Queue row buttons are borderless: accent-tinted, grey while disabled. */
+.queue-row .icon-btn { color: var(--accent); }
+.queue-row .icon-btn:disabled { color: var(--text-2); opacity: 0.5; }

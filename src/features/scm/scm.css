@@ -1,0 +1,21 @@
+/* Status bar (StatusBar.swift): HStack(spacing: 14), 11pt, secondary, 24pt tall, .bar, 1pt hairline on top. */
+.scm-status { height: var(--status-h); flex: none; display: flex; align-items: center; gap: 14px; padding: 0 12px; font-size: 11px; color: var(--text-2); background: var(--window); box-shadow: inset 0 1px 0 var(--hairline); min-width: 0; overflow: hidden; }
+.scm-status > button { display: inline-flex; align-items: center; gap: 4px; border: 0; background: transparent; color: inherit; padding: 0; height: 20px; font-size: 11px; white-space: nowrap; }
+.scm-status > button:disabled { opacity: 0.5; }
+.scm-status > span { white-space: nowrap; }
+/* SwiftUI .buttonStyle(.borderless): no bezel, tinted with the accent colour. */
+.scm-bl { display: inline-flex; align-items: center; justify-content: center; gap: 4px; border: 0; background: transparent; color: var(--accent); padding: 0 2px; min-height: 16px; cursor: default; white-space: nowrap; }
+.scm-bl:active:not(:disabled) { opacity: 0.7; }
+.scm-bl:disabled { opacity: 0.35; }
+/* .buttonStyle(.link): accent text, no underline. */
+.scm-link { border: 0; background: transparent; padding: 0; color: var(--accent); cursor: default; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.scm-link:disabled { opacity: 0.4; }
+/* A borderless-button Menu label (with its small chevron indicator). */
+.scm-menu { display: inline-flex; align-items: center; gap: 4px; border: 0; background: transparent; color: var(--text); padding: 0; cursor: default; min-width: 0; white-space: nowrap; }
+.scm-menu:disabled { opacity: 0.45; }
+.scm-row { cursor: default; }
+/* ReviewView file card: textBackgroundColor, radius 10, 1pt hairline stroke. */
+.scm-card { background: var(--bg); border-radius: 10px; overflow: hidden; flex: none; position: relative; }
+.scm-card > * { position: relative; }
+.scm-card::after { content: ""; position: absolute; inset: 0; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--hairline); pointer-events: none; }
+.scm-hist:hover { background: var(--hover); }

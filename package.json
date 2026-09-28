@@ -1,0 +1,40 @@
+{
+  "name": "spar-app",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "predev": "sh scripts/fetch-drawio.sh",
+    "dev": "vite",
+    "prebuild": "sh scripts/build-wheel.sh && sh scripts/fetch-drawio.sh",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "dev:bridge": "SPAR_DEV_BRIDGE=1 SPAR_DEV_BRIDGE_ONLY=1 tauri dev",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-dialog": "^2.8.0",
+    "@tauri-apps/plugin-opener": "^2",
+    "@xterm/addon-fit": "^0.11.0",
+    "@xterm/xterm": "^6.0.0",
+    "lucide-react": "^1.48.0",
+    "marked": "^18.0.14",
+    "mermaid": "^12.0.0",
+    "monaco-editor": "^0.52.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^6.0.2",
+    "typescript": "~6.0.3",
+    "vite": "^8.0.16",
+    "vitest": "^5.0.2"
+  },
+  "description": "SPAR desktop: spec-driven development with AI agents, for Windows, macOS and Linux"
+}

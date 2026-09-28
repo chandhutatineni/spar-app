@@ -1,0 +1,39 @@
+/* Editor feature styles. The macOS system colours SwiftUI's Color.blue/.teal/… resolve to
+   (NSColor.system*, sampled in aqua and darkAqua), for file icons and Welcome capability tints. */
+:root {
+  --sys-blue: rgb(0, 136, 255); --sys-teal: rgb(0, 195, 208); --sys-orange: rgb(255, 141, 40); --sys-green: rgb(52, 199, 89);
+  --sys-pink: rgb(255, 45, 85); --sys-purple: rgb(203, 48, 224); --sys-brown: rgb(172, 127, 94); --sys-yellow: rgb(255, 204, 0);
+  --sys-cyan: rgb(0, 192, 232);
+  /* Theme.subtle.opacity(2): the Explorer's selected row. */
+  --ed-selected: rgba(0, 0, 0, 0.08);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sys-blue: rgb(0, 145, 255); --sys-teal: rgb(0, 210, 224); --sys-orange: rgb(255, 146, 48); --sys-green: rgb(48, 209, 88);
+    --sys-pink: rgb(255, 55, 95); --sys-purple: rgb(219, 52, 242); --sys-brown: rgb(183, 138, 102); --sys-yellow: rgb(255, 214, 0);
+    --sys-cyan: rgb(60, 211, 254);
+    --ed-selected: rgba(255, 255, 255, 0.08);
+  }
+}
+:root[data-theme="dark"] {
+  --sys-blue: rgb(0, 145, 255); --sys-teal: rgb(0, 210, 224); --sys-orange: rgb(255, 146, 48); --sys-green: rgb(48, 209, 88);
+  --sys-pink: rgb(255, 55, 95); --sys-purple: rgb(219, 52, 242); --sys-brown: rgb(183, 138, 102); --sys-yellow: rgb(255, 214, 0);
+  --sys-cyan: rgb(60, 211, 254);
+  --ed-selected: rgba(255, 255, 255, 0.08);
+}
+
+/* Borderless SwiftUI buttons (Explorer header): the symbol alone, accent-tinted. */
+.ed-borderless { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 18px; padding: 0; border: 0; border-radius: 4px;
+  background: transparent; color: var(--accent); cursor: default; flex: none; }
+.ed-borderless:active { opacity: 0.6; }
+
+/* The Welcome tab's Start buttons: Label(title, systemImage:) in a subtle capsule. */
+.ed-start { display: flex; align-items: flex-start; gap: 5px; flex: 0 1 auto; border: 0; padding: 8px 12px; border-radius: 9px;
+  background: var(--subtle); font-size: 12px; line-height: 15px; text-align: left; color: var(--text); cursor: default; }
+.ed-start .ed-start-icon { display: inline-flex; height: 15px; align-items: center; flex: none; }
+.ed-start .ed-start-label { white-space: nowrap; }
+
+/* SwiftUI's mini switch (Toggle(.switch).controlSize(.mini)). */
+.switch.ed-mini { width: 26px; height: 15px; border-radius: 7.5px; }
+.switch.ed-mini::after { top: 1.5px; left: 1.5px; width: 12px; height: 12px; }
+.switch.ed-mini.on::after { left: 12.5px; }

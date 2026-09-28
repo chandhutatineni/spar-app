@@ -1,0 +1,18 @@
+/* Traceability page (TraceView.swift) at the macOS text-style sizes: callout 12, caption and
+   caption2 10. Scoped to .ins-trace so the AI Impact page keeps its own styling. */
+.ins-trace { line-height: 1.25; }
+.ins-trace .ins-callout { font-size: 12px; }
+.ins-trace .ins-caption, .ins-trace .ins-caption2 { font-size: 10px; }
+.ins-trace .title2 { font-size: 17px; font-weight: 600; }
+/* .card(): Theme.card, 12pt corners, a 1pt Theme.hairline (primary 8%) stroke. */
+.ins-trace .ins-card, .ins-trace .ins-matrix { border: 1px solid color-mix(in srgb, var(--text) 9.4%, transparent); border-radius: 12px; }
+.ins-trace .ins-matrix-head { font-size: 10px; border-bottom-color: var(--hairline-strong); }
+.ins-trace .ins-matrix-head > span { min-width: 0; }
+.ins-trace .ins-matrix-row { font-size: 12px; border-bottom-color: var(--hairline-strong); }
+.ins-trace .ins-gnode { border-color: color-mix(in srgb, var(--text) 9.4%, transparent); }
+.ins-trace .ins-gnode.on { border-color: var(--accent); }
+.ins-trace .ins-chip { font-size: 13px; background: color-mix(in srgb, var(--text) 4.7%, transparent); }
+.ins-trace .ins-progress { background: color-mix(in srgb, var(--text) 11.8%, transparent); }
+.ins-trace .text-field { font-size: 13px; }
+/* IssueBadge: caption2 monospaced medium, accent at 10% in a capsule. */
+.ins-issue { font: 500 10px var(--mono); }

@@ -1,0 +1,166 @@
+/* SPAR design tokens — the Mac app's Theme.swift, in light and dark. Appearance comes from
+   the "appearance" preference (light / dark / system) via <html data-theme>. */
+:root {
+  --accent: #5c57f2;
+  --accent-hover: #4f4ae6;
+  --accent-soft: rgba(92, 87, 242, 0.12);
+  --done: #33a878;
+  --warn: #ed9929;
+  --stop: #e04d4d;
+
+  --bg: #ffffff;            /* editor / content */
+  --window: #f5f5f7;        /* window chrome */
+  --sidebar: #f0f0f3;
+  --card: #ffffff;
+  /* macOS label colours: labelColor, secondaryLabelColor, tertiaryLabelColor */
+  --text: rgba(0, 0, 0, 0.85);
+  --text-2: rgba(0, 0, 0, 0.5);
+  --text-3: rgba(0, 0, 0, 0.26);
+  --hairline: rgba(0, 0, 0, 0.08);
+  --hairline-strong: rgba(0, 0, 0, 0.14);
+  --subtle: rgba(0, 0, 0, 0.04);
+  --hover: rgba(0, 0, 0, 0.05);
+  --selected: rgba(92, 87, 242, 0.14);
+  --field: #ffffff;
+  --shadow: 0 10px 40px rgba(0, 0, 0, 0.18), 0 0 0 0.5px rgba(0, 0, 0, 0.12);
+  --code-bg: rgba(0, 0, 0, 0.045);
+  --btn-fill: rgba(0, 0, 0, 0.06);
+  --btn-fill-hover: rgba(0, 0, 0, 0.1);
+  --menu-fill: rgba(0, 0, 0, 0.075);
+  --seg-track: rgba(0, 0, 0, 0.06);
+
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, "Helvetica Neue", sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --toolbar-h: 44px;
+  --status-h: 24px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1e1e1e; --window: #24282a; --sidebar: #1d1f21; --card: #212121;
+    --text: rgba(255, 255, 255, 0.85); --text-2: rgba(255, 255, 255, 0.55); --text-3: rgba(255, 255, 255, 0.25);
+    --hairline: rgba(255, 255, 255, 0.06); --hairline-strong: rgba(255, 255, 255, 0.1);
+    --subtle: rgba(255, 255, 255, 0.05); --hover: rgba(255, 255, 255, 0.07); --selected: rgba(124, 120, 255, 0.24);
+    --btn-fill: rgba(255, 255, 255, 0.035); --btn-fill-hover: rgba(255, 255, 255, 0.07); --menu-fill: rgba(255, 255, 255, 0.067); --seg-track: rgba(255, 255, 255, 0.068); --field: #1e1e1e; --accent-soft: rgba(124, 120, 255, 0.2); --code-bg: rgba(255, 255, 255, 0.07);
+    --shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1e1e1e; --window: #24282a; --sidebar: #1d1f21; --card: #212121;
+  --text: rgba(255, 255, 255, 0.85); --text-2: rgba(255, 255, 255, 0.55); --text-3: rgba(255, 255, 255, 0.25);
+  --hairline: rgba(255, 255, 255, 0.06); --hairline-strong: rgba(255, 255, 255, 0.1);
+  --subtle: rgba(255, 255, 255, 0.05); --hover: rgba(255, 255, 255, 0.07); --selected: rgba(124, 120, 255, 0.24);
+  --btn-fill: rgba(255, 255, 255, 0.035); --btn-fill-hover: rgba(255, 255, 255, 0.07); --menu-fill: rgba(255, 255, 255, 0.067); --seg-track: rgba(255, 255, 255, 0.068); --field: #1e1e1e; --accent-soft: rgba(124, 120, 255, 0.2); --code-bg: rgba(255, 255, 255, 0.07);
+  --shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { margin: 0; height: 100%; overflow: hidden; }
+body { font: 13px/1.45 var(--font); color: var(--text); background: var(--window); user-select: none; -webkit-user-select: none; }
+input, textarea, [contenteditable], .selectable, pre, code { user-select: text; -webkit-user-select: text; }
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: var(--accent); }
+code, pre, .mono { font-family: var(--mono); }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--hairline-strong); border-radius: 10px; border: 2px solid transparent; background-clip: content-box; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* Icons: lighter strokes, closer to SF Symbols. */
+svg.lucide { stroke-width: 1.75px; }
+/* SF Symbols (ui/icons.tsx): a box the size of the lucide icon, the glyph centred in it. */
+.sf-icon { display: inline-flex; align-items: center; justify-content: center; flex: none; vertical-align: middle; }
+svg.lucide[data-bold] { stroke-width: 2.4px; }
+
+/* ---- primitives ---- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 7px; border: 0; background: var(--btn-fill); color: var(--text); cursor: default; white-space: nowrap; font-size: 13px; }
+.btn:hover:not(:disabled) { background: var(--btn-fill-hover); }
+/* The project window is tinted (RootView .tint(Theme.accent)): on macOS 26 a default/bordered
+   button in the active window draws accent text on a 5% accent fill. Menus (JSON ▾), plain
+   buttons, alerts (NSAlert) and the Settings window (no .tint) stay neutral. */
+.btn:not(.btn-primary, .btn-danger, .btn-plain, [data-menu]) { background: color-mix(in srgb, var(--accent) 5%, transparent); color: var(--accent); }
+.btn:not(.btn-primary, .btn-danger, .btn-plain, [data-menu]):hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+.btn[data-menu]:not(.btn-plain, .btn-primary) { background: var(--menu-fill); }
+.btn[data-menu]:not(.btn-plain, .btn-primary):hover:not(:disabled) { background: var(--btn-fill-hover); }
+.btn[data-menu]:not(.btn-plain, .btn-primary) > .sf-icon:first-child, .btn[data-menu]:not(.btn-plain, .btn-primary) > svg:first-child { color: var(--accent); }
+.gf .btn:not(.btn-primary, .btn-danger, .btn-plain), .dialog .btn:not(.btn-primary, .btn-danger, .btn-plain) { background: var(--btn-fill); color: var(--text); }
+.gf .btn:not(.btn-primary, .btn-danger, .btn-plain):hover:not(:disabled), .dialog .btn:not(.btn-primary, .btn-danger, .btn-plain):hover:not(:disabled) { background: var(--btn-fill-hover); }
+.btn:active:not(:disabled) { filter: brightness(0.95); }
+.btn:disabled { opacity: 0.45; }
+.btn-primary { background: var(--accent); color: #fff; border-color: transparent; }
+.btn-primary:hover:not(:disabled) { background: var(--accent-hover); }
+.btn-danger { background: var(--stop); color: #fff; border-color: transparent; }
+.btn-plain { background: transparent; border-color: transparent; box-shadow: none; }
+.btn-small { height: 20px; padding: 0 8px; font-size: 11px; border-radius: 6px; }
+.btn-large { height: 32px; padding: 0 16px; font-size: 14px; }
+.icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 6px; border: 0; background: transparent; color: var(--text-2); cursor: default; }
+.icon-btn:hover:not(:disabled) { background: var(--hover); color: var(--text); }
+.icon-btn.active { color: var(--accent); background: var(--accent-soft); }
+.icon-btn:disabled { opacity: 0.4; }
+.text-field { height: 26px; padding: 0 8px; border-radius: 6px; border: 0.5px solid var(--hairline-strong); background: var(--field); outline: none; width: 100%; }
+.text-field:focus, .text-area:focus { box-shadow: 0 0 0 3px var(--accent-soft); border-color: var(--accent); }
+.text-area { padding: 6px 8px; border-radius: 6px; border: 0.5px solid var(--hairline-strong); background: var(--field); outline: none; width: 100%; resize: vertical; }
+select.text-field { padding-right: 4px; }
+.card { background: var(--card); border: 1px solid var(--hairline); border-radius: var(--radius-lg); padding: 16px; }
+.muted { color: var(--text-2); }
+.faint { color: var(--text-3); }
+.caption { font-size: 11.5px; color: var(--text-2); }
+.headline { font-weight: 600; font-size: 13px; }
+.title { font-size: 20px; font-weight: 700; }
+.title2 { font-size: 17px; font-weight: 600; }
+.row { display: flex; align-items: center; gap: 8px; }
+.col { display: flex; flex-direction: column; gap: 8px; }
+.spacer { flex: 1; }
+.pill { display: inline-flex; align-items: center; gap: 4px; padding: 1px 7px; border-radius: 999px; font-size: 11px; font-weight: 600; background: var(--subtle); color: var(--text-2); }
+.pill-accent { background: var(--accent-soft); color: var(--accent); }
+.hr { height: 0.5px; background: var(--hairline-strong); border: 0; margin: 8px 0; }
+.status-dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.spinner { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--hairline-strong); border-top-color: var(--accent); animation: spin 0.8s linear infinite; flex: none; }
+.spinner.small { width: 11px; height: 11px; border-width: 1.5px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.22); display: flex; align-items: flex-start; justify-content: center; padding-top: 8vh; z-index: 1000; }
+.modal { background: var(--window); border-radius: 12px; box-shadow: var(--shadow); max-height: 84vh; overflow: auto; }
+.sheet { padding: 24px; }
+.sheet-title { font-size: 17px; font-weight: 600; line-height: 21px; margin-bottom: 4px; }
+.sheet-footer { display: flex; gap: 8px; justify-content: flex-end; margin-top: 18px; }
+.dialog { width: 380px; padding: 20px; }
+.dialog-title { font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+.dialog-message { color: var(--text-2); margin-bottom: 14px; white-space: pre-wrap; }
+.dialog-buttons { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
+
+.menu { position: fixed; z-index: 1100; min-width: 180px; background: var(--card); border-radius: 8px; box-shadow: var(--shadow); padding: 5px; font-size: 13px; }
+.menu-item { display: flex; align-items: center; gap: 8px; min-height: 22px; padding: 3px 10px; line-height: 16px; border-radius: 5px; cursor: default; white-space: nowrap; }
+.menu-item:hover:not(.disabled) { background: var(--accent); color: #fff; }
+.menu-item:hover:not(.disabled) .menu-shortcut, .menu-item:hover:not(.disabled) .menu-detail { color: rgba(255,255,255,0.8); }
+.menu-item.disabled { opacity: 0.4; }
+.menu-check { width: 14px; display: inline-flex; }
+.menu-shortcut { margin-left: auto; padding-left: 20px; color: var(--text-3); font-size: 12px; }
+.menu-detail { font-size: 11px; line-height: 14px; color: var(--text-2); }
+.menu-section { padding: 6px 10px 2px; font-size: 11px; font-weight: 600; color: var(--text-3); }
+.menu-divider { height: 0.5px; background: var(--hairline-strong); margin: 4px 6px; }
+
+.switch { position: relative; width: 30px; height: 18px; border-radius: 9px; background: var(--hairline-strong); border: 0; flex: none; transition: background 0.15s; }
+.switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.3); transition: left 0.15s; }
+.switch.on { background: var(--accent); }
+.switch.on::after { left: 14px; }
+.segmented { display: inline-flex; background: var(--seg-track); border-radius: 7px; padding: 2px; gap: 2px; }
+.segmented button { border: 0; background: transparent; padding: 2px 10px; border-radius: 5px; font-size: 12px; color: var(--text-2); }
+.segmented button.on { background: var(--accent); color: #fff; box-shadow: 0 0.5px 1.5px rgba(0,0,0,0.25); }
+.empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--text-2); text-align: center; padding: 24px; height: 100%; }
+
+/* ---- window toolbar (grouped capsules, like the macOS toolbar) ---- */
+.toolbar { height: var(--toolbar-h); flex: none; display: flex; align-items: center; gap: 8px; padding-right: 10px; background: var(--window); border-bottom: 0.5px solid var(--hairline-strong); }
+.tb-group { display: flex; align-items: center; gap: 2px; height: 30px; padding: 0 3px; border-radius: 15px; background: var(--subtle); border: 0.5px solid var(--hairline); }
+.tb-group .icon-btn { width: 28px; height: 26px; border-radius: 13px; }
+.tb-group .icon-btn.active { background: transparent; color: var(--text); }
+.tb-group > span { padding: 0 6px; font-size: 12.5px; color: var(--text-2); font-variant-numeric: tabular-nums; font-family: var(--font); }
+.tb-project { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 8px 0 5px; border: 0; border-radius: 13px; background: transparent; color: var(--accent); font-weight: 600; font-size: 13px; }
+.tb-project:hover { background: var(--hover); }
+.tb-run .btn { height: 26px; border: 0; box-shadow: none; background: transparent; border-radius: 13px; color: var(--text-2); }
+.tb-run .btn:hover { background: var(--hover); color: var(--text); }
+.tb-run .btn > span:not(.sf-icon) { display: none; }

@@ -1,0 +1,42 @@
+/* The SPAR loop sidebar (SidebarView.swift) and the phase pages (PhaseView.swift).
+   SwiftUI `Color.primary.opacity(a)` is written color-mix(var(--text) a/0.85). */
+
+/* ---- sidebar: a List(.sidebar) ---- */
+.work-sidebar { flex: 1; overflow-y: auto; padding-bottom: 12px; font-size: 13px; }
+.work-sidebar .ellipsis { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+/* LoopNavigator: a zero-inset row (top 4, bottom 8) inside the list's 16pt margins, padded 6 vertically. */
+.loop-nav { display: flex; flex-direction: column; gap: 10px; padding: 10px 16px 14px; }
+.loop-next { display: flex; align-items: center; gap: 6px; height: 13px; background: none; border: 0; padding: 0; color: var(--text-2); font-size: 10px; font-weight: 500; line-height: 13px; text-align: left; }
+.phase-row { display: flex; align-items: center; gap: 11px; height: 50px; border: 0; background: transparent; width: 100%; text-align: left; color: inherit; position: relative; padding-top: 0; padding-bottom: 0; }
+.phase-row::before { content: ""; position: absolute; top: 0; bottom: 0; right: 0; left: var(--sel-x, 14px); border-radius: 10px; pointer-events: none; }
+.phase-row:hover::before { background: color-mix(in srgb, var(--text) 4.7%, transparent); }
+.phase-row.selected::before { background: var(--sel); }
+/* PulseRing: Circle().stroke(lineWidth 2) — the stroke straddles the 26pt circle. */
+.pulse-ring { position: absolute; inset: -1px; border-radius: 50%; border: 2px solid; animation: pulse-ring 1.4s ease-out infinite; }
+.pulse-ring.still { animation: none; transform: scale(1.05); opacity: .5; }
+@keyframes pulse-ring { from { transform: scale(1.05); opacity: .5; } to { transform: scale(1.7); opacity: 0; } }
+
+.sidebar-section { height: 20px; margin-top: 12px; padding: 0 1.5px 0 14px; display: flex; align-items: center; font-size: 11px; font-weight: 600; color: var(--text-3); }
+.loop-nav + .sidebar-section { margin-top: 8px; }
+.sidebar-section-btn { display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 20px; border: 0; padding: 0; background: none; color: var(--text-2); }
+.sidebar-row { display: flex; align-items: center; gap: 8px; height: 32px; margin: 0 10px; width: calc(100% - 20px); padding: 0 6.5px 0 8px; border: 0; border-radius: 8px; background: transparent; text-align: left; color: var(--text); font-size: 13px; }
+.sidebar-row.iteration { height: auto; min-height: 42px; padding-top: 4px; padding-bottom: 4px; gap: 10px; }
+.sidebar-row.selected { background: var(--selected); }
+.sidebar-icon { display: inline-flex; align-items: center; justify-content: center; width: 20px; flex: none; color: var(--text-2); }
+.sidebar-count { font-size: 10px; font-variant-numeric: tabular-nums; color: var(--text-2); }
+.sidebar-note { padding: 0 16px; height: 32px; display: flex; align-items: center; font-size: 12px; color: var(--text-2); }
+
+/* ---- phase pages ---- */
+.phase-page { flex: 1; overflow-y: auto; line-height: 1.25; }
+.phase-page-inner { max-width: 940px; margin: 0 auto; padding: 40px 48px; display: flex; flex-direction: column; gap: 30px; }
+/* .card(): Theme.card, 12pt continuous corners, a hairline stroke. */
+.phase-page .card { border-radius: 12px; border: 1px solid color-mix(in srgb, var(--text) 9.4%, transparent); background: var(--card); }
+.art-card { text-align: left; border: 1px solid color-mix(in srgb, var(--text) 9.4%, transparent); background: var(--card); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 10px; color: inherit; transition: transform .15s, box-shadow .15s; }
+.art-card:hover { transform: translateY(-1px); box-shadow: 0 5px 12px rgba(0,0,0,.07); }
+.art-card .art-open { opacity: 0; transition: opacity .15s; }
+.art-card:hover .art-open { opacity: 1; }
+.grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+.phase-link { display: inline-flex; align-items: center; gap: 4px; background: none; border: 0; padding: 0; color: var(--accent); font-size: 12px; font-weight: 500; }
+.phase-link:hover { text-decoration: underline; }
+.label-row { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.example-row { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 10px; background: color-mix(in srgb, var(--text) 4.7%, transparent); border: 0; text-align: left; color: inherit; font-size: 12px; }

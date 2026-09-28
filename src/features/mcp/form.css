@@ -1,0 +1,83 @@
+/* A SwiftUI Form with .formStyle(.grouped) on macOS (the Settings window). Measured from a
+   SwiftUI render of the Mac app's SettingsView at 2x: 480pt window, 20pt side insets,
+   11pt-radius section cards, 10pt row insets, 1pt separators, 36pt rows. The Settings scene
+   has no .tint, so its controls use the system accent (blue), not SPAR's indigo. */
+:root {
+  --gf-bg: #ffffff; --gf-card: #f7f7f7; --gf-sep: #ebebeb; --gf-fill: rgba(0, 0, 0, 0.076);
+  --gf-switch: rgba(0, 0, 0, 0.1); --gf-knob: #ffffff; --gf-knob-on: #ffffff; --gf-divider: rgba(0, 0, 0, 0.1);
+  --gf-accent: #3275f0; --gf-link: #2b66d3;
+}
+.gf { height: 100%; overflow: auto; background: var(--gf-bg); color: var(--text); }
+/* The main window is tinted with SPAR's accent (RootView .tint(Theme.accent)). */
+.gf-switch.tinted { --gf-accent: var(--accent); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --gf-bg: #24282a; --gf-card: #2b2e30; --gf-sep: #35383a; --gf-fill: rgba(255, 255, 255, 0.078);
+    --gf-switch: rgba(255, 255, 255, 0.095); --gf-knob: #dfdfdf; --gf-knob-on: #e1ebfe; --gf-divider: rgba(255, 255, 255, 0.1);
+    --gf-accent: #397bf6; --gf-link: #5a9af8;
+  }
+}
+:root[data-theme="dark"] {
+  --gf-bg: #24282a; --gf-card: #2b2e30; --gf-sep: #35383a; --gf-fill: rgba(255, 255, 255, 0.078);
+  --gf-switch: rgba(255, 255, 255, 0.095); --gf-knob: #dfdfdf; --gf-knob-on: #e1ebfe; --gf-divider: rgba(255, 255, 255, 0.1);
+  --gf-accent: #397bf6; --gf-link: #5a9af8;
+}
+
+.gf-page { max-width: 480px; margin: 0 auto; padding: 28px 20px 28px; font-size: 13px; line-height: 16px; }
+.gf-section + .gf-section { margin-top: 30px; }
+.gf-header { font-size: 13px; line-height: 16px; font-weight: 700; padding: 0 10px; margin-bottom: 10px; }
+.gf-card { background: var(--gf-card); border-radius: 11px; padding: 0 10px; }
+
+.gf-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 36px; padding: 8px 0; }
+.gf-row.top { align-items: flex-start; }
+.gf-card > * + * { border-top: 1px solid var(--gf-sep); }
+.gf-card > .gf-row + .gf-row, .gf-card > .gf-row:not(:first-child) { min-height: 37.5px; }
+.gf-label { flex: none; }
+.gf-value { color: var(--text-2); }
+.gf-caption { font-size: 10px; line-height: 13px; color: var(--text-2); padding: 10px 0; }
+.gf-caption.inline { padding: 0; }
+.gf-block { padding: 8px 0 10px; }
+
+/* Segmented picker: equal segments as wide as the widest label. */
+.gf-seg { display: inline-grid; grid-auto-flow: column; grid-auto-columns: 1fr; height: 24px; border-radius: 7px; background: var(--gf-fill); }
+.gf-seg button { position: relative; border: 0; background: transparent; padding: 0 11px; border-radius: 7px; font-size: 13px; color: var(--text); white-space: nowrap; }
+.gf-seg button + button::before { content: ""; position: absolute; left: -0.5px; top: 5px; bottom: 5px; width: 1px; background: var(--gf-divider); }
+.gf-seg button.on::before, .gf-seg button.on + button::before { display: none; }
+.gf-seg button.on { background: var(--gf-accent); color: #fff; }
+
+/* Switch (.toggleStyle(.switch) in a grouped form). */
+.gf-switch { position: relative; flex: none; width: 36px; height: 15px; border-radius: 7.5px; border: 0; padding: 0; background: var(--gf-switch); transition: background 0.15s; }
+.gf-switch::after { content: ""; position: absolute; top: 1px; left: 1.5px; width: 21px; height: 13px; border-radius: 6.5px; background: var(--gf-knob); box-shadow: 0 0.5px 1.5px rgba(0, 0, 0, 0.25); transition: left 0.15s; }
+.gf-switch.on { background: var(--gf-accent); }
+.gf-switch.on::after { left: 13.5px; background: var(--gf-knob-on); }
+.gf-switch:disabled { opacity: 0.5; }
+
+/* Stepper: the stacked up/down arrows. */
+.gf-stepper { flex: none; display: flex; flex-direction: column; width: 18px; height: 26px; border-radius: 5px; background: var(--gf-fill); overflow: hidden; }
+.gf-stepper button { flex: 1; border: 0; padding: 0; background: transparent; color: var(--text); display: flex; align-items: center; justify-content: center; }
+.gf-stepper button + button { border-top: 1px solid var(--gf-divider); }
+.gf-stepper button:active:not(:disabled) { background: var(--gf-fill); }
+.gf-stepper button:disabled { opacity: 0.35; }
+
+/* Menu picker: the value, then a round up/down chevron badge; a native <select> on top. */
+.gf-menu { position: relative; flex: none; display: inline-flex; align-items: center; gap: 12px; padding-right: 3.5px; }
+.gf-menu .badge { width: 20px; height: 20px; border-radius: 10px; background: var(--gf-fill); display: inline-flex; align-items: center; justify-content: center; }
+.gf-menu select { position: absolute; inset: 0; opacity: 0; width: 100%; appearance: none; -webkit-appearance: none; }
+
+/* TextField: label on the left, the text right-aligned and borderless. */
+.gf-field { flex: 1; min-width: 0; border: 0; outline: none; background: transparent; text-align: right; font-size: 13px; color: var(--text); padding: 0; }
+.gf-field::placeholder { color: var(--text); opacity: 0.93; }
+.gf-field:focus::placeholder { color: var(--text-3); opacity: 1; }
+
+/* Bordered buttons (regular / .controlSize(.small)) and .buttonStyle(.link). */
+.gf-btn { flex: none; height: 24px; padding: 0 12px; border: 0; border-radius: 7px; background: var(--gf-fill); color: var(--text); font-size: 13px; white-space: nowrap; }
+.gf-btn.small { height: 20px; padding: 0 11px; border-radius: 6px; font-size: 11px; }
+.gf-btn:active:not(:disabled) { filter: brightness(1.25); }
+.gf-btn:disabled { opacity: 0.45; }
+.gf-link { border: 0; background: transparent; padding: 0; color: var(--gf-link); font: inherit; text-align: left; }
+.gf-link:disabled { opacity: 0.45; }
+/* Shared small buttons inside the form (RuntimeStatus' "Check and repair"). */
+.gf .btn.btn-small { height: 20px; padding: 0 11px; border: 0; border-radius: 6px; background: var(--gf-fill); color: var(--text); font-size: 11px; box-shadow: none; }
+/* .buttonStyle(.plain) / borderless icon buttons (the MCP page's ellipsis and repository links). */
+.mcp-plain { display: inline-flex; align-items: center; justify-content: center; border: 0; background: transparent; padding: 0 2px; min-height: 16px; }
+.mcp-plain:active { opacity: 0.6; }
